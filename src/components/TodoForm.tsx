@@ -1,9 +1,27 @@
-import React from "react";
+import React, { useRef } from "react";
 
-export const TodoForm: React.FC = () => {
+interface TodoFormProps {
+  onAdd(title: string): void;
+}
+
+export const TodoForm: React.FC<TodoFormProps> = (props) => {
+  const ref = useRef<HTMLInputElement>(null);
+
+  const keyPressHandler = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter") {
+      props.onAdd(ref.current!.value);
+      ref.current!.value = "";
+    }
+  };
   return (
-    <div className="input-field">
-      <input type="text" id="title" />
+    <div className="input-field mt2">
+      <input
+        ref={ref}
+        type="text"
+        id="title"
+        placeholder="Введіть назву справи"
+        onKeyPress={keyPressHandler}
+      />
       <label htmlFor="title" className="active">
         Введіть назву справи
       </label>
